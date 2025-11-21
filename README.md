@@ -7,8 +7,10 @@ Open back-end via intelij
 Run both together + mongodb in order to get full stack project running
 
 ## Team members
-- Add name
-- Add feature
+- Will Young
+- Feature: Friends List
+- Cole Sanders
+- Feature: Block List
 - post recording
 
 
