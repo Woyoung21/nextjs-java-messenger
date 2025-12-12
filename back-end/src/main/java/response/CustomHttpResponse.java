@@ -29,7 +29,7 @@ public class CustomHttpResponse {
         if (body != null && !body.isEmpty() && !body.isBlank()) {
             res += lineBreak + body;
         }
-
+        res += lineBreak;
         System.out.println("Raw http response:");
         System.out.println(res);
         return res;

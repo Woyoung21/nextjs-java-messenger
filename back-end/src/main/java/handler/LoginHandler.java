@@ -36,7 +36,7 @@ public class LoginHandler implements BaseHandler {
             authDto.setUserName(userDto.getUserName());
             authDao.put(authDto);
             res.setStatus(StatusCodes.OK);
-            res.setHeader("Set-Cookie", "auth=" + hash );
+            res.setHeader("Set-Cookie", "auth=" + hash + "; max-age=86400 ;path=/ ; " );
             res.setBody(new RestApiAppResponse<>(true, null, null));
         }
         return res;

@@ -30,9 +30,13 @@ public class GetConversationsHandler implements BaseHandler {
         var convos = conversationDao.query("toId", userDto.getUserName());
         var convos2 = conversationDao.query("fromId", userDto.getUserName());
 
-        convos.addAll(convos2);
+        // convos may be immutable depending on DAO implementation.
+        // Create a new mutable list and add elements from both query
+        // results.
+        var allConvos = new java.util.ArrayList<>(convos);
+        allConvos.addAll(convos2);
 
-        var res = new RestApiAppResponse<>(true, convos, null);
+        var res = new RestApiAppResponse<>(true, allConvos, null);
         return new ResponseBuilder().setStatus("200 OK").setBody(res);
     }
 }

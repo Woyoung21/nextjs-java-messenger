@@ -13,7 +13,12 @@ public class MongoConnection {
 
     private static Supplier<MongoDatabase> clientSupplier = () -> {
         if(mongoClient == null){
-            mongoClient = new MongoClient("localhost", 27017);
+            String runningInDocker = System.getenv("RUNNING_IN_DOCKER");
+            String host = "localhost";
+            if (runningInDocker != null && !runningInDocker.isEmpty()) {
+                host = "host.docker.internal";
+            }
+            mongoClient = new MongoClient(host, 27017);
         }
         return mongoClient.getDatabase("Homework2");
     };

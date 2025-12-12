@@ -4,6 +4,7 @@ import Layout from "@/app/layout";
 import React from "react";
 import ChatBar from "./ChatBar";
 import ChatList from "./ChatList";
+import FriendsList from "./FriendsList";
 
 interface UserDto {
   userName: string;
@@ -70,7 +71,10 @@ export default function Home() {
       )}
 
       {!activeChatUser && (
-        <ChatList currentUser={user?.userName} onOpenChat={(username) => setActiveChatUser(username)} />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginTop: 20 }}>
+          <FriendsList currentUser={user?.userName} />
+          <ChatList currentUser={user?.userName} onOpenChat={(username) => setActiveChatUser(username)} />
+        </div>
       )}
 
       {activeChatUser ? (
