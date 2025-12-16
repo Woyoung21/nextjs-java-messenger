@@ -29,6 +29,7 @@ public class FriendRequestDao extends BaseDao<FriendRequestDto> {
 
     public static void setInstanceSupplier(Supplier<FriendRequestDao> instanceSupplier) {
         FriendRequestDao.instanceSupplier = instanceSupplier;
+        FriendRequestDao.instance = null;
     }
 
     @Override

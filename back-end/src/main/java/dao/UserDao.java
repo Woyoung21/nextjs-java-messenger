@@ -28,6 +28,7 @@ public class UserDao extends BaseDao<UserDto> {
 
     public static void setInstanceSupplier(Supplier<UserDao> instanceSupplier){
         UserDao.instanceSupplier = instanceSupplier;
+        UserDao.instance = null;
     }
 
     @Override

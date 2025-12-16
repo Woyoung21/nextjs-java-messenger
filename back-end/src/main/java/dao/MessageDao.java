@@ -28,6 +28,7 @@ public class MessageDao extends BaseDao<MessageDto> {
 
     public static void setInstanceSupplier(Supplier<MessageDao> instanceSupplier){
         MessageDao.instanceSupplier = instanceSupplier;
+        MessageDao.instance = null;
     }
 
     @Override

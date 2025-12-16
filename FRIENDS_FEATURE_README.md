@@ -4,7 +4,7 @@
 
 A mutual friend request system where users can send, accept, or decline friend requests. Both parties must approve before becoming friends.
 
-**Implemented by:** Will Young  & Cursor
+**Implemented by:** Will Young  & AI Agent Assistance
 **Date:** December 12, 2025
 
 ---
@@ -139,6 +139,25 @@ The Friends section appears on the left side of the dashboard with:
 ### Mutual Friendship Confirmed
 - **test25@gmail.com** dashboard shows test23@gmail.com as friend
 - **test23@gmail.com** dashboard shows test25@gmail.com as friend
+
+---
+
+## Unit Tests
+
+Unit tests are provided for all 4 handlers using TestNG and Mockito.
+
+| Test File | Tests |
+|-----------|-------|
+| `SendFriendRequestHandlerTests.java` | Success, self-request fails, user not found, duplicate request, unauthorized |
+| `GetFriendRequestsHandlerTests.java` | Success, filters pending only, empty list, unauthorized |
+| `RespondFriendRequestHandlerTests.java` | Accept success, decline success, not found, wrong user, already responded, unauthorized |
+| `GetFriendsHandlerTests.java` | Success, multiple friends, empty list, unauthorized |
+
+**Total: 18 test cases**
+
+To run tests in IntelliJ:
+1. Right-click on `src/test/java`
+2. Select "Run All Tests"
 
 ---
 
