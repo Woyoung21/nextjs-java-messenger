@@ -153,11 +153,12 @@ Unit tests are provided for all 4 handlers using TestNG and Mockito.
 | `RespondFriendRequestHandlerTests.java` | Accept success, decline success, not found, wrong user, already responded, unauthorized |
 | `GetFriendsHandlerTests.java` | Success, multiple friends, empty list, unauthorized |
 
-**Total: 18 test cases**
+**Total: 19 test cases**
 
 To run tests in IntelliJ:
-1. Right-click on `src/test/java`
-2. Select "Run All Tests"
+1. Right-click on any test file (e.g., `SendFriendRequestHandlerTests.java`)
+2. Select **"Run"**
+3. Or right-click on `src/test/java/applogic` folder and select **"Run Tests in 'applogic'"**
 
 ---
 
