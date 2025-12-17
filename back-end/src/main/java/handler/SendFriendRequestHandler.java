@@ -2,6 +2,7 @@ package handler;
 
 import auth.AuthFilter;
 import dao.FriendRequestDao;
+import dao.BlockDao;
 import dao.UserDao;
 import dto.FriendRequestDto;
 import request.ParsedRequest;
@@ -36,6 +37,13 @@ public class SendFriendRequestHandler implements BaseHandler {
         var targetUser = UserDao.getInstance().query("userName", toUser);
         if (targetUser.isEmpty()) {
             var res = new RestApiAppResponse<>(false, null, "User not found");
+            return new ResponseBuilder().setStatus(StatusCodes.BAD_REQUEST).setBody(res);
+        }
+
+        // Do not allow friend requests if either user has blocked the other
+        BlockDao blockDao = BlockDao.getInstance();
+        if (blockDao.isBlocked(toUser, authResult.userName) || blockDao.isBlocked(authResult.userName, toUser)) {
+            var res = new RestApiAppResponse<>(false, null, "Cannot send friend request due to block status");
             return new ResponseBuilder().setStatus(StatusCodes.BAD_REQUEST).setBody(res);
         }
 

@@ -4,6 +4,7 @@ import auth.AuthFilter;
 import dao.ConversationDao;
 import dao.MessageDao;
 import dao.UserDao;
+import dao.BlockDao;
 import dto.ConversationDto;
 import dto.MessageDto;
 import request.ParsedRequest;
@@ -38,6 +39,13 @@ public class SendMessageHandler implements BaseHandler {
                 .orElse(null);
         if(toUser == null){
             var res = new RestApiAppResponse<>(false, null, "To id is invalid user");
+            return new ResponseBuilder().setStatus("200 OK").setBody(res);
+        }
+
+        // If recipient has blocked sender, don't deliver
+        BlockDao blockDao = BlockDao.getInstance();
+        if (blockDao.isBlocked(messageDto.getToId(), sendUser.getUserName())) {
+            var res = new RestApiAppResponse<>(false, null, "You are blocked by the recipient");
             return new ResponseBuilder().setStatus("200 OK").setBody(res);
         }
 

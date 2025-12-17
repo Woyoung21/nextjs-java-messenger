@@ -1,6 +1,7 @@
 package util;
 
 import dao.AuthDao;
+import dao.BlockDao;
 import dao.ConversationDao;
 import dao.FriendRequestDao;
 import dao.MessageDao;
@@ -18,6 +19,7 @@ public class MockTestUtils {
     public final AuthDao mockAuthDao;
     public final ConversationDao mockConversationDao;
     public final FriendRequestDao mockFriendRequestDao;
+    public final BlockDao mockBlockDao;
 
     public MockTestUtils() {
         this.mockUserDao = Mockito.mock(UserDao.class);
@@ -25,11 +27,13 @@ public class MockTestUtils {
         this.mockAuthDao =  Mockito.mock(AuthDao.class);
         this.mockConversationDao =  Mockito.mock(ConversationDao.class);
         this.mockFriendRequestDao = Mockito.mock(FriendRequestDao.class);
+        this.mockBlockDao = Mockito.mock(BlockDao.class);
         AuthDao.setInstanceSupplier(() -> mockAuthDao);
         MessageDao.setInstanceSupplier(() -> mockMessageDao);
         ConversationDao.setInstanceSupplier(() -> mockConversationDao);
         UserDao.setInstanceSupplier(() -> mockUserDao);
         FriendRequestDao.setInstanceSupplier(() -> mockFriendRequestDao);
+        BlockDao.setInstanceSupplier(() -> mockBlockDao);
     }
 
     public AuthDto createLogin(String userName){

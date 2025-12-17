@@ -27,6 +27,12 @@ public class HandlerFactory {
                 return new RespondFriendRequestHandler();
             case "/getFriends":
                 return new GetFriendsHandler();
+            case "/blockUser":
+                return new BlockUserHandler();
+            case "/unblockUser":
+                return new UnblockUserHandler();
+            case "/getBlockedUsers":
+                return new GetBlockedUsersHandler();
             default:
                 return new FallbackHandler();
         }
