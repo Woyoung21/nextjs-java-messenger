@@ -12,5 +12,7 @@ Run both together + mongodb in order to get full stack project running
 - Cole Sanders
 - Feature: Block List
 - post recording
+- Vansh Singh
+- Feature: Delete Chat
 
 
