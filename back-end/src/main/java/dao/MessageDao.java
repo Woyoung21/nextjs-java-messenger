@@ -25,6 +25,9 @@ public class MessageDao extends BaseDao<MessageDto> {
         instance = instanceSupplier.get();
         return instance;
     }
+    public void deleteByConversationId(String conversationId) {
+        collection.deleteMany(new Document("conversationId", conversationId));
+    }
 
     public static void setInstanceSupplier(Supplier<MessageDao> instanceSupplier){
         MessageDao.instanceSupplier = instanceSupplier;

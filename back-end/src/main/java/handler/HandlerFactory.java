@@ -33,6 +33,8 @@ public class HandlerFactory {
                 return new UnblockUserHandler();
             case "/getBlockedUsers":
                 return new GetBlockedUsersHandler();
+            case "/deleteConversation":
+                return new DeleteConversationHandler();
             default:
                 return new FallbackHandler();
         }

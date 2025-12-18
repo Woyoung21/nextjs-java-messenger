@@ -23,10 +23,11 @@ interface MessageDto {
 
 export default function ChatBar({ currentUser, targetUser }: Props) {
   const [messages, setMessages] = React.useState<MessageDto[]>([]);
-  // recipient input removed; use targetUserInput state instead
   const [text, setText] = React.useState('');
   const messagesRef = React.useRef<HTMLDivElement | null>(null);
-  if (!currentUser || !targetUser) return;
+
+  // if no chat is open, render nothing
+  if (!currentUser || !targetUser) return null;
 
   const ids = [currentUser, targetUser].slice().sort();
   const conversationId = `${ids[0]}_${ids[1]}`;
@@ -39,7 +40,9 @@ export default function ChatBar({ currentUser, targetUser }: Props) {
 
   async function loadConversation() {
     try {
-      const res = await fetch(`/api/getConversation?conversationId=${encodeURIComponent(conversationId)}`);
+      const res = await fetch(
+        `/api/getConversation?conversationId=${encodeURIComponent(conversationId)}`
+      );
       if (!res.ok) {
         console.error('Failed to load conversation', await res.text());
         return;
@@ -51,16 +54,41 @@ export default function ChatBar({ currentUser, targetUser }: Props) {
     }
   }
 
-
-  // load conversation when currentUser or targetUserInput changes
+  // load conversation when user or target changes
   React.useEffect(() => {
-
     loadConversation();
-  }, [currentUser]);
+  }, [currentUser, targetUser, conversationId]);
+
+  async function deleteConversation() {
+    if (!currentUser || !targetUser) {
+      alert('Open a chat first');
+      return;
+    }
+
+    const ids = [currentUser, targetUser].slice().sort();
+    const conversationId = `${ids[0]}_${ids[1]}`;
+
+    try {
+      const res = await fetch(
+        `/api/deleteConversation?conversationId=${encodeURIComponent(conversationId)}`,
+        { method: 'POST' }
+      );
+      const data = await res.json();
+
+      if (data.status) {
+        setMessages([]);
+        setText('');
+        alert('Conversation deleted');
+      } else {
+        alert(data.message ?? 'Failed to delete conversation');
+      }
+    } catch (err) {
+      console.error('Error deleting conversation', err);
+      alert('Error deleting conversation');
+    }
+  }
 
   async function send() {
-
-    // compute conversation id for this pair
     const ids = [currentUser || '', targetUser || ''].slice().sort();
     const conversationId = `${ids[0]}_${ids[1]}`;
 
@@ -71,7 +99,6 @@ export default function ChatBar({ currentUser, targetUser }: Props) {
       fromId: currentUser,
     };
 
-    // optimistic UI message while waiting for server
     const optimistic = {
       from: currentUser || 'me',
       to: targetUser || '',
@@ -79,6 +106,9 @@ export default function ChatBar({ currentUser, targetUser }: Props) {
       time: new Date().toLocaleTimeString(),
     } as MessageDto;
 
+    if (!text.trim()) return;
+
+    // show existing history
     loadConversation();
     setText('');
 
@@ -91,23 +121,23 @@ export default function ChatBar({ currentUser, targetUser }: Props) {
 
       if (res.ok) {
         const data = await res.json();
-        // map server response to UI-friendly shape
         const serverMsg: MessageDto = {
           from: data.from || data.fromId || currentUser || 'me',
           to: data.to || data.toId || targetUser || '',
           text: data.text || data.message || payload.message,
           time: data.time || data.createdAt || new Date().toLocaleTimeString(),
-          // keep any ids returned
           fromId: data.fromId || payload.fromId,
           toId: data.toId || payload.toId,
           uniqueId: data.uniqueId || data.id,
         };
 
-        // replace the optimistic message with server message
         setMessages((prev) => {
           const copy = [...prev];
-          // find last optimistic message matching text and recipient
-          const idx = copy.findLastIndex((m) => (m.text || m.message) === optimistic.text && (m.to || m.toId) === optimistic.to);
+          const idx = copy.findLastIndex(
+            (m) =>
+              (m.text || m.message) === optimistic.text &&
+              (m.to || m.toId) === optimistic.to
+          );
           if (idx !== -1) {
             copy[idx] = serverMsg;
           } else {
@@ -169,8 +199,16 @@ export default function ChatBar({ currentUser, targetUser }: Props) {
           >
             Send
           </button>
+
+          <button
+            onClick={deleteConversation}
+            style={{ height: 44, padding: '0 16px', alignSelf: 'center' }}
+          >
+            Delete chat
+          </button>
         </div>
       </div>
     </div>
   );
 }
+

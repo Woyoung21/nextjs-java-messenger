@@ -25,6 +25,9 @@ public class ConversationDao extends BaseDao<ConversationDto> {
         instance = instanceSupplier.get();
         return instance;
     }
+    public void deleteByConversationId(String conversationId) {
+        collection.deleteOne(new org.bson.Document("conversationId", conversationId));
+    }
 
     public static void setInstanceSupplier(Supplier<ConversationDao> instanceSupplier){
         ConversationDao.instanceSupplier = instanceSupplier;
